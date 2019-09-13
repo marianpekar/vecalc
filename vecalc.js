@@ -274,10 +274,6 @@ function updateTableOfAngles() {
     let angleV2b = Utils.calculageAngle(vectors[1],vectors[4]);
     let angleV2bComma = Utils.calculageAngle(vectors[1],vectors[5]);
 
-    let angleAc = Utils.calculageAngle(vectors[3],vectors[2]);
-    let angleBc = Utils.calculageAngle(vectors[4],vectors[2]);
-    let angleBCommaC = Utils.calculageAngle(vectors[5],vectors[2]);
-
     let angleAb = Utils.calculageAngle(vectors[3],vectors[4]);
     let angleAbComma = Utils.calculageAngle(vectors[3],vectors[5]);
 
@@ -332,7 +328,7 @@ function updateTableOfAngles() {
         <td> ${ZERO.toFixed(args.decimals)}</td>
         <td> ${(angleAb * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleAbComma * degToRadSwitch).toFixed(args.decimals)}</td>
-        <td> ${(angleAc * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleAx * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleAy * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleAz * degToRadSwitch).toFixed(args.decimals)}</td>
@@ -344,7 +340,7 @@ function updateTableOfAngles() {
         <td> ${(angleAb * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${ZERO.toFixed(args.decimals)}</td>
         <td> ${(Math.PI * degToRadSwitch).toFixed(args.decimals)}</td>
-        <td> ${(angleBc * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleBx * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleBy * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleBz * degToRadSwitch).toFixed(args.decimals)}</td>
@@ -356,7 +352,7 @@ function updateTableOfAngles() {
         <td> ${(angleAbComma * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(Math.PI * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${ZERO.toFixed(args.decimals)}</td>
-        <td> ${(angleBCommaC * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleBCommaX * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleBCommaY * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleBCommaZ * degToRadSwitch).toFixed(args.decimals)}</td>
@@ -365,9 +361,9 @@ function updateTableOfAngles() {
         <td> c </td>
         <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
-        <td> ${(angleAc * degToRadSwitch).toFixed(args.decimals)}</td>
-        <td> ${(angleBc * degToRadSwitch).toFixed(args.decimals)}</td>
-        <td> ${(angleBCommaC * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${ZERO.toFixed(args.decimals)}</td>
         <td> ${(angleCx * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleCy * degToRadSwitch).toFixed(args.decimals)}</td>
