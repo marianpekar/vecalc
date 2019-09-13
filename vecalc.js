@@ -1,4 +1,3 @@
-const MAX_CAMERA_DISTANCE = 30;
 const MIN_CAMERA_DISTANCE = 1;
 const LABEL_X_OFFSET = 5;
 const AXIS_LENGHT = 10;
@@ -29,7 +28,7 @@ let args = {
     v2z: 1,
     decimals: 2,
     showAxis: true,
-    showGrid: false,
+    showGrid: true,
     showNormalized: false,
     anglesInRad: false
 }
@@ -65,9 +64,11 @@ function init() {
     renderer.setSize( window.innerWidth, window.innerHeight );
     document.body.appendChild( renderer.domElement );
 
-    camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1, 10000);
+    camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 10000);
     camera.position.set(5,5,10);  
+
     controls = new THREE.OrbitControls( camera ); 
+    controls.minDistance = MIN_CAMERA_DISTANCE;
 
     window.addEventListener( 'resize', onResize, false );
     document.addEventListener( 'keydown', onKeyDown, false );
@@ -234,14 +235,14 @@ function updateInfoPanel() {
     b = v1 - v2 = ${vectors[4].x.toFixed(args.decimals)}i + ${vectors[4].y.toFixed(args.decimals)}j + ${vectors[4].z.toFixed(args.decimals)}k
     b' = v2 - v1 = ${vectors[5].x.toFixed(args.decimals)}i + ${vectors[5].y.toFixed(args.decimals)}j + ${vectors[5].z.toFixed(args.decimals)}k
 
+    c = v1 ✕ v2 = ${vectors[2].x.toFixed(args.decimals)}i + ${vectors[2].y.toFixed(args.decimals)}j + ${vectors[2].z.toFixed(args.decimals)}k
+    v1 • v2 = ${Utils.calculateDotProduct(vectors[0],vectors[1]).toFixed(args.decimals)}
+
     | v1 | = ${Utils.calculateVectorLenght(vectors[0]).toFixed(args.decimals)}
     | v2 | = ${Utils.calculateVectorLenght(vectors[1]).toFixed(args.decimals)}
     | a | = ${Utils.calculateVectorLenght(vectors[3]).toFixed(args.decimals)}
     | b | = | b' | = ${Utils.calculateVectorLenght(vectors[4]).toFixed(args.decimals)}
     | c | = ${Utils.calculateVectorLenght(vectors[2]).toFixed(args.decimals)}
-    
-    c = v1 ✕ v2 = ${vectors[2].x.toFixed(args.decimals)}i + ${vectors[2].y.toFixed(args.decimals)}j + ${vectors[2].z.toFixed(args.decimals)}k
-    v1 • v2 = ${Utils.calculateDotProduct(vectors[0],vectors[1]).toFixed(args.decimals)}
     ` ;
 }   
 
@@ -284,7 +285,7 @@ function updateTableOfAngles() {
     let angleAbComma = Utils.calculageAngle(vectors[3],vectors[5]);
 
     let degToRadSwitch = args.anglesInRad ? 1 : 180 / Math.PI;
-    
+
     tableOfAnglesDOM.innerHTML = `   
     <tr>
         <td>∠ ${args.anglesInRad ? "rad" : "°"}</td>
