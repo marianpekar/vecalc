@@ -4,7 +4,7 @@ Vecalc (Vector Calculator) is a little web-based helper for basic vector math.
 
 Release: https://marianpekar.github.io/vecalc/
 
-It takes two vectors on the input (via dat-gui on the top right corner) and computes their **magnitudes, dot product, cross product, the magnitude of the cross product, the angle between them and also between each axis for each of them as well as the angles between cross product and each axis**. The Angles are shown both in **degrees and radians**.
+It takes two vectors on the input (via dat-gui on the top right corner) and computes their **addition, subtraction, dot product, cross product, magnitudes of all vectors, the angles among them and also between each axis for each of them as well**. The Angles are shown both in **degrees and radians**.
 
 All the outputs are presented in the top left corner. Its precision could be set from 1 to 5 decimals via dat-gui.
 
