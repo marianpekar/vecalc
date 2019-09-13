@@ -245,7 +245,7 @@ function updateInfoPanel() {
 
     a = v1 + v2 = ${vectors[3].x.toFixed(args.decimals)}i + ${vectors[3].y.toFixed(args.decimals)}j + ${vectors[3].z.toFixed(args.decimals)}k
     b = v1 - v2 = ${vectors[4].x.toFixed(args.decimals)}i + ${vectors[4].y.toFixed(args.decimals)}j + ${vectors[4].z.toFixed(args.decimals)}k
-    b' = v2 - v1 = ${vectors[3].x.toFixed(args.decimals)}i + ${vectors[3].y.toFixed(args.decimals)}j + ${vectors[3].z.toFixed(args.decimals)}k
+    b' = v2 - v1 = ${vectors[5].x.toFixed(args.decimals)}i + ${vectors[5].y.toFixed(args.decimals)}j + ${vectors[5].z.toFixed(args.decimals)}k
 
     | v1 | = ${Utils.calculateVectorLenght(vectors[0]).toFixed(args.decimals)}
     | v2 | = ${Utils.calculateVectorLenght(vectors[1]).toFixed(args.decimals)}
