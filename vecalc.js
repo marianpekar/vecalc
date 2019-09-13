@@ -3,6 +3,10 @@ const MIN_CAMERA_DISTANCE = 1;
 const LABEL_X_OFFSET = 5;
 const AXIS_LENGHT = 10;
 
+const GRID_SIZE = 20;
+const GRID_DIVISION = 20;
+const AXIS_OFFSET = 0.01; // to construct axis with two lines close to each other and avoid overlap with grid 
+
 const ZERO = 0;
 const RIGHT_ANGLE_RAD = 90 * Math.PI / 180;
 const PI_DEG = 180;
@@ -25,6 +29,7 @@ let args = {
     v2z: 1,
     decimals: 2,
     showAxis: true,
+    showGrid: false,
     showNormalized: false,
     anglesInRad: 0
 }
@@ -91,10 +96,19 @@ function draw() {
     if(args.showAxis)
         drawAxis();
     
+    if(args.showGrid)
+        drawGrid();
+    
     drawVectors();
     updateInfoPanel();
     updateLabels();
     updateTableOfAngles();
+}
+
+function drawGrid() {
+    let grid = new THREE.GridHelper(GRID_SIZE, GRID_DIVISION);
+    grid.colorCenterLine = new THREE.Color(0x00ff00);
+    scene.add(grid);
 }
 
 function updateLabels() {
@@ -148,7 +162,7 @@ function drawVectors() {
             geometry.vertices.push(new THREE.Vector3(vectors[i].x,vectors[i].y,vectors[i].z));
 
         let line = new THREE.Line(geometry, new THREE.LineBasicMaterial({
-            color: vectors[i].color
+            color: vectors[i].color,
             }));
         scene.add(line);
     }
@@ -207,11 +221,14 @@ function updateCamera() {
 function addAxis(x,y,z,color) {
     let geometry = new THREE.Geometry();
     
-    geometry.vertices.push(new THREE.Vector3(x,y,z));
-    geometry.vertices.push(new THREE.Vector3(-x,-y,-z));
+    geometry.vertices.push(new THREE.Vector3(x + AXIS_OFFSET, y + AXIS_OFFSET,z + AXIS_OFFSET));
+    geometry.vertices.push(new THREE.Vector3(-x + AXIS_OFFSET, -y + AXIS_OFFSET,-z + AXIS_OFFSET));
+
+    geometry.vertices.push(new THREE.Vector3(x - AXIS_OFFSET, y - AXIS_OFFSET,z - AXIS_OFFSET));
+    geometry.vertices.push(new THREE.Vector3(-x - AXIS_OFFSET, -y - AXIS_OFFSET,-z - AXIS_OFFSET));
+
     let line = new THREE.Line(geometry, new THREE.LineBasicMaterial({
-        color: color,
-        linewidth: 2}));
+        color: color}));
     scene.add(line);
 }      
 

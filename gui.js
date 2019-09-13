@@ -13,6 +13,7 @@ vector2Folder.add(args, 'v2z', -10, 10).name("Z").step(0.1).onChange(draw);
 vector2Folder.open();
 
 gui.add(args, 'showAxis').name("Show Axis").onChange(draw);
+gui.add(args, 'showGrid').name("Show Grid").onChange(draw);
 gui.add(args, 'showNormalized').name("Show Normalized").onChange(draw);
 gui.add(args, 'decimals', 1, 5).name("Decimals").step(1).onChange(draw);
 gui.add(args, 'anglesInRad', { rad: 1, deg: 0 }).name("Angles in").onChange(draw);
