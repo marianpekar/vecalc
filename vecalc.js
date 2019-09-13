@@ -24,10 +24,18 @@ let args = {
     showNormalized: false
 }
 
+// DOMs live here
 let infoPanelDOM = document.getElementById("info-panel");
+
 let v1LabelDOM = document.getElementById("v1-label");
 let v2LabelDOM = document.getElementById("v2-label");
+
+let aLabelDOM = document.getElementById("a-label");
+let bLabelDOM = document.getElementById("b-label");
+let bCommaLabelDOM = document.getElementById("b-comma-label")
+
 let cLabelDOM = document.getElementById("c-label");
+// ---
 
 init();
 animate();
@@ -56,15 +64,21 @@ function draw() {
     vectors = [];
     clearScene();
 
-    vectors.push(Utils.createVector(args.v1x,args.v1y,args.v1z));
-    vectors.push(Utils.createVector(args.v2x,args.v2y,args.v2z));
-    vectors.push(Utils.createCrossProduct(vectors[0], vectors[1]));
+    vectors.push(Utils.createVector(args.v1x,args.v1y,args.v1z)); // 0 = 0
+    vectors.push(Utils.createVector(args.v2x,args.v2y,args.v2z)); // 1 = 1
+    vectors.push(Utils.createCrossProduct(vectors[0], vectors[1])); // 2 = 0 x 1
+    vectors.push(Utils.add(vectors[0], vectors[1])); // 3 = 0 + 1
+    vectors.push(Utils.subtract(vectors[0], vectors[1])); // 4 = 0 - 1
+    vectors.push(Utils.subtract(vectors[1], vectors[0])); // 5 = 1 - 0
 
     if(args.showNormalized) {
         vectorsNorm = [];
         vectorsNorm.push(Utils.normalize(Utils.createVector(args.v1x,args.v1y,args.v1z)));
         vectorsNorm.push(Utils.normalize(Utils.createVector(args.v2x,args.v2y,args.v2z)));
         vectorsNorm.push(Utils.normalize(Utils.createCrossProduct(vectors[0], vectors[1])));
+        vectorsNorm.push(Utils.normalize(Utils.add(vectors[0], vectors[1])));
+        vectorsNorm.push(Utils.normalize(Utils.subtract(vectors[0], vectors[1])));
+        vectorsNorm.push(Utils.normalize(Utils.subtract(vectors[1], vectors[0])));
     }
 
     if(args.showAxis)
@@ -78,18 +92,31 @@ function draw() {
 function updateLabels() {
     let v1ScreenPos = getScreenPos(new THREE.Vector3(vectors[0].x, vectors[0].y, vectors[0].z));
     let v2ScreenPos = getScreenPos(new THREE.Vector3(vectors[1].x, vectors[1].y, vectors[1].z));
+
     let cScreenPos = getScreenPos(new THREE.Vector3(vectors[2].x, vectors[2].y, vectors[2].z));
+    
+    let aScreenPos = getScreenPos(new THREE.Vector3(vectors[3].x, vectors[3].y, vectors[3].z));
+    let bScreenPos = getScreenPos(new THREE.Vector3(vectors[4].x, vectors[4].y, vectors[4].z));
+    let bCommaScreenPos = getScreenPos(new THREE.Vector3(vectors[5].x, vectors[5].y, vectors[5].z));
 
     if(args.showNormalized) {
         v1ScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[0].x, vectorsNorm[0].y, vectorsNorm[0].z));
         v2ScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[1].x, vectorsNorm[1].y, vectorsNorm[1].z));
         cScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[2].x, vectorsNorm[2].y, vectorsNorm[2].z));
+        aScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[3].x, vectorsNorm[3].y, vectorsNorm[3].z));
+        bScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[4].x, vectorsNorm[4].y, vectorsNorm[4].z));
+        bCommaScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[5].x, vectorsNorm[5].y, vectorsNorm[5].z));
+    
     }
 
     v1LabelDOM.setAttribute('style',`left: ${v1ScreenPos.x + LABEL_X_OFFSET}px; top: ${v1ScreenPos.y}px`);
     v2LabelDOM.setAttribute('style',`left: ${v2ScreenPos.x + LABEL_X_OFFSET}px; top: ${v2ScreenPos.y}px`);
+
     cLabelDOM.setAttribute('style',`left: ${cScreenPos.x + LABEL_X_OFFSET}px; top: ${cScreenPos.y}px`);
 
+    aLabelDOM.setAttribute('style',`left: ${aScreenPos.x + LABEL_X_OFFSET}px; top: ${aScreenPos.y}px`);
+    bLabelDOM.setAttribute('style',`left: ${bScreenPos.x + LABEL_X_OFFSET}px; top: ${bScreenPos.y}px`);
+    bCommaLabelDOM.setAttribute('style',`left: ${bCommaScreenPos.x + LABEL_X_OFFSET}px; top: ${bCommaScreenPos.y}px`);
 }
 
 function clearScene() {
@@ -201,11 +228,29 @@ function updateInfoPanel() {
     let angleCy = Utils.calculageAngle(vectors[2],Utils.createVector(0,1,0));
     let angleCz = Utils.calculageAngle(vectors[2],Utils.createVector(0,0,1));
 
+    let angleAx = Utils.calculageAngle(vectors[3],Utils.createVector(1,0,0));
+    let angleAy = Utils.calculageAngle(vectors[3],Utils.createVector(0,1,0));
+    let angleAz = Utils.calculageAngle(vectors[3],Utils.createVector(0,0,1));
+
+    let angleBx = Utils.calculageAngle(vectors[4],Utils.createVector(1,0,0));
+    let angleBy = Utils.calculageAngle(vectors[4],Utils.createVector(0,1,0));
+    let angleBz = Utils.calculageAngle(vectors[4],Utils.createVector(0,0,1));
+
+    let angleBCommaX = Utils.calculageAngle(vectors[5],Utils.createVector(1,0,0));
+    let angleBCommaY = Utils.calculageAngle(vectors[5],Utils.createVector(0,1,0));
+    let angleBCommaZ = Utils.calculageAngle(vectors[5],Utils.createVector(0,0,1));
+
     infoPanelDOM.innerText = `v1 = ${vectors[0].x.toFixed(args.decimals)}i + ${vectors[0].y.toFixed(args.decimals)}j + ${vectors[0].z.toFixed(args.decimals)}k
     v2 = ${vectors[1].x.toFixed(args.decimals)}i + ${vectors[1].y.toFixed(args.decimals)}j + ${vectors[1].z.toFixed(args.decimals)}k
 
+    a = v1 + v2 = ${vectors[3].x.toFixed(args.decimals)}i + ${vectors[3].y.toFixed(args.decimals)}j + ${vectors[3].z.toFixed(args.decimals)}k
+    b = v1 - v2 = ${vectors[4].x.toFixed(args.decimals)}i + ${vectors[4].y.toFixed(args.decimals)}j + ${vectors[4].z.toFixed(args.decimals)}k
+    b' = v2 - v1 = ${vectors[3].x.toFixed(args.decimals)}i + ${vectors[3].y.toFixed(args.decimals)}j + ${vectors[3].z.toFixed(args.decimals)}k
+
     | v1 | = ${Utils.calculateVectorLenght(vectors[0]).toFixed(args.decimals)}
     | v2 | = ${Utils.calculateVectorLenght(vectors[1]).toFixed(args.decimals)}
+    | a | = ${Utils.calculateVectorLenght(vectors[3]).toFixed(args.decimals)}
+    | b | = | b' | = ${Utils.calculateVectorLenght(vectors[4]).toFixed(args.decimals)}
     | c | = ${Utils.calculateVectorLenght(vectors[2]).toFixed(args.decimals)}
     
     c = v1 ✕ v2 = ${vectors[2].x.toFixed(args.decimals)}i + ${vectors[2].y.toFixed(args.decimals)}j + ${vectors[2].z.toFixed(args.decimals)}k
@@ -224,5 +269,17 @@ function updateInfoPanel() {
     c ∠ X = ${(angleCx * 180 / Math.PI).toFixed(args.decimals)}° (${angleCx.toFixed(args.decimals)} rad)
     c ∠ Y = ${(angleCy * 180 / Math.PI).toFixed(args.decimals)}° (${angleCy.toFixed(args.decimals)} rad)
     c ∠ Z = ${(angleCz * 180 / Math.PI).toFixed(args.decimals)}° (${angleCz.toFixed(args.decimals)} rad)
+
+    a ∠ X = ${(angleAx * 180 / Math.PI).toFixed(args.decimals)}° (${angleCx.toFixed(args.decimals)} rad)
+    a ∠ Y = ${(angleAy * 180 / Math.PI).toFixed(args.decimals)}° (${angleCy.toFixed(args.decimals)} rad)
+    a ∠ Z = ${(angleAz * 180 / Math.PI).toFixed(args.decimals)}° (${angleCz.toFixed(args.decimals)} rad)
+
+    b ∠ X = ${(angleBx * 180 / Math.PI).toFixed(args.decimals)}° (${angleCx.toFixed(args.decimals)} rad)
+    b ∠ Y = ${(angleBy * 180 / Math.PI).toFixed(args.decimals)}° (${angleCy.toFixed(args.decimals)} rad)
+    b ∠ Z = ${(angleBz * 180 / Math.PI).toFixed(args.decimals)}° (${angleCz.toFixed(args.decimals)} rad)
+
+    b' ∠ X = ${(angleBCommaX * 180 / Math.PI).toFixed(args.decimals)}° (${angleCx.toFixed(args.decimals)} rad)
+    b' ∠ Y = ${(angleBCommaY * 180 / Math.PI).toFixed(args.decimals)}° (${angleCy.toFixed(args.decimals)} rad)
+    b' ∠ Z = ${(angleBCommaZ * 180 / Math.PI).toFixed(args.decimals)}° (${angleCz.toFixed(args.decimals)} rad)
     `;
 }   
