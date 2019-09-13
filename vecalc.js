@@ -15,7 +15,6 @@ let camera, scene, raycaster, renderer, container, controls;
 let vectors = [];
 let vectorsNorm = [];
 
-let mouse = new THREE.Vector2(), INTERSECTED;
 const windowHalf = new THREE.Vector2( window.innerWidth / 2, window.innerHeight / 2 );
 let radius = 13;
 
