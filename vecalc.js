@@ -5,20 +5,20 @@ const AXIS_LENGHT = 10;
 
 const GRID_SIZE = 20;
 const GRID_DIVISION = 20;
-const AXIS_OFFSET = 0.01; // to construct axis with two lines close to each other and avoid overlap with grid 
+const AXIS_OFFSET = 0.001; // to construct axis with two lines close to each other and avoid overlap with grid 
 
 const ZERO = 0;
 const RIGHT_ANGLE_RAD = 90 * Math.PI / 180;
 const PI_DEG = 180;
 
-let camera, scene, raycaster, renderer, container; 
+let camera, scene, raycaster, renderer, container, controls;
 
 let vectors = [];
 let vectorsNorm = [];
 
 let mouse = new THREE.Vector2(), INTERSECTED;
 const windowHalf = new THREE.Vector2( window.innerWidth / 2, window.innerHeight / 2 );
-let radius = 13, theta = 15;
+let radius = 13;
 
 let args = {
     v1x: 1,
@@ -50,14 +50,14 @@ let tableOfAnglesDOM = document.getElementById("table-of-angles");
 // ---
 
 init();
+draw();
 animate();
+updateLabels();
 
 function init() {
     container = document.createElement('div');
     document.body.appendChild(container);
 
-    camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1, 10000);
-    
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x122232);
 
@@ -65,11 +65,15 @@ function init() {
     renderer.setSize( window.innerWidth, window.innerHeight );
     document.body.appendChild( renderer.domElement );
 
-    document.addEventListener( 'keydown', onKeyDown, false );
-    window.addEventListener( 'resize', onResize, false );
+    camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 1, 10000);
+    camera.position.set(5,5,10);  
+    controls = new THREE.OrbitControls( camera ); 
 
-    updateCamera();
-    draw();
+    window.addEventListener( 'resize', onResize, false );
+    document.addEventListener( 'keydown', onKeyDown, false );
+    document.addEventListener( 'mousemove', onMouseMove, false );
+    document.addEventListener( 'wheel', onWheel, false);
+    document.addEventListener( 'load', onLoad, false);
 }
 
 function draw() {
@@ -100,6 +104,7 @@ function draw() {
         drawGrid();
     
     drawVectors();
+
     updateInfoPanel();
     updateLabels();
     updateTableOfAngles();
@@ -184,39 +189,27 @@ function onResize() {
     windowHalf.set( width / 2, height / 2 );
 
     camera.aspect = width / height;
-    camera.updateProjectionMatrix();
     renderer.setSize( width, height );
 
     updateLabels();
 }
 
-function onKeyDown( event ) {
-    if(event.keyCode == 65 || event.keyCode == 37)
-        theta -= 0.5;
-
-    if(event.keyCode == 68 || event.keyCode == 39) 
-        theta += 0.5;
-    
-    if(event.keyCode == 87 || event.keyCode == 38)
-        if(radius >= MIN_CAMERA_DISTANCE)
-            radius -= 0.1;
-    
-    if(event.keyCode == 83 || event.keyCode == 40) 
-        if(radius <= MAX_CAMERA_DISTANCE)
-            radius += 0.1;
-
+function onKeyDown() {
     updateLabels();
-    updateCamera();
 }
 
-function updateCamera() {
-    camera.position.x = radius * Math.sin( THREE.Math.degToRad( theta ) );
-    camera.position.y = radius * Math.sin( THREE.Math.degToRad( theta ) );
-    camera.position.z = radius * Math.cos( THREE.Math.degToRad( theta ) );
-    camera.lookAt( scene.position );
-
-    camera.updateMatrixWorld();            
+function onMouseMove() {
+    updateLabels();
 }
+
+function onLoad() {
+    updateLabels();
+}
+
+function onWheel() {
+    updateLabels();
+}
+
 
 function addAxis(x,y,z,color) {
     let geometry = new THREE.Geometry();
@@ -234,6 +227,7 @@ function addAxis(x,y,z,color) {
 
 function animate() {
     requestAnimationFrame(animate);
+    controls.update();
     renderer.render( scene, camera );
 }
 

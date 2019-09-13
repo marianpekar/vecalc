@@ -10,5 +10,11 @@ All the other outputs are presented in the top left corner. Precision could be s
 
 All vectors are visualized in 3D space with axes thanks to THREE.js. In case you want to see normalized versions of these vectors, in dat-gui tick **Show Normalized**. You can also hide axis by unticking **Show Axes**
 
-You can **move around** on sine wave using **left and right keys (or A and D)** and **zoom-in/out** using **up and down arrows (W/D)**.
+## Orbit Controlls
+
+You can **rotate and move around** using mouse and keys:
+
+- Scroll up/down: zoom in/out
+- LMB + Move: rotate
+- RMB + Move or arrow keys: traverse
 
