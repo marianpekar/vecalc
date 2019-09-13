@@ -66,13 +66,13 @@ function init() {
     camera = new THREE.PerspectiveCamera(80, window.innerWidth / window.innerHeight, 0.1, 10000);
     camera.position.set(5,5,10);  
 
-    controls = new THREE.OrbitControls( camera ); 
+    controls = new THREE.OrbitControls( camera, renderer.domElement ); 
     controls.minDistance = MIN_CAMERA_DISTANCE;
 
     window.addEventListener( 'resize', onResize, false );
     document.addEventListener( 'keydown', onKeyDown, false );
     document.addEventListener( 'mousemove', onMouseMove, false );
-    document.addEventListener( 'wheel', onWheel, false);
+    renderer.domElement.addEventListener( 'wheel', onWheel, false);
 }
 
 function draw() {
