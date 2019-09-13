@@ -3,6 +3,10 @@ const MIN_CAMERA_DISTANCE = 1;
 const LABEL_X_OFFSET = 5;
 const AXIS_LENGHT = 10;
 
+const ZERO = 0;
+const RIGHT_ANGLE_RAD = 90 * Math.PI / 180;
+const PI_DEG = 180;
+
 let camera, scene, raycaster, renderer, container; 
 
 let vectors = [];
@@ -21,7 +25,8 @@ let args = {
     v2z: 1,
     decimals: 2,
     showAxis: true,
-    showNormalized: false
+    showNormalized: false,
+    anglesInRad: 0
 }
 
 // DOMs live here
@@ -35,6 +40,8 @@ let bLabelDOM = document.getElementById("b-label");
 let bCommaLabelDOM = document.getElementById("b-comma-label")
 
 let cLabelDOM = document.getElementById("c-label");
+
+let tableOfAnglesDOM = document.getElementById("table-of-angles");
 // ---
 
 init();
@@ -87,6 +94,7 @@ function draw() {
     drawVectors();
     updateInfoPanel();
     updateLabels();
+    updateTableOfAngles();
 }
 
 function updateLabels() {
@@ -105,8 +113,7 @@ function updateLabels() {
         cScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[2].x, vectorsNorm[2].y, vectorsNorm[2].z));
         aScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[3].x, vectorsNorm[3].y, vectorsNorm[3].z));
         bScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[4].x, vectorsNorm[4].y, vectorsNorm[4].z));
-        bCommaScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[5].x, vectorsNorm[5].y, vectorsNorm[5].z));
-    
+        bCommaScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[5].x, vectorsNorm[5].y, vectorsNorm[5].z));    
     }
 
     v1LabelDOM.setAttribute('style',`left: ${v1ScreenPos.x + LABEL_X_OFFSET}px; top: ${v1ScreenPos.y}px`);
@@ -214,7 +221,26 @@ function animate() {
 }
 
 function updateInfoPanel() {
-    let angle = Utils.calculageAngle(vectors[0],vectors[1]);
+    infoPanelDOM.innerText = `v1 = ${vectors[0].x.toFixed(args.decimals)}i + ${vectors[0].y.toFixed(args.decimals)}j + ${vectors[0].z.toFixed(args.decimals)}k
+    v2 = ${vectors[1].x.toFixed(args.decimals)}i + ${vectors[1].y.toFixed(args.decimals)}j + ${vectors[1].z.toFixed(args.decimals)}k
+
+    a = v1 + v2 = ${vectors[3].x.toFixed(args.decimals)}i + ${vectors[3].y.toFixed(args.decimals)}j + ${vectors[3].z.toFixed(args.decimals)}k
+    b = v1 - v2 = ${vectors[4].x.toFixed(args.decimals)}i + ${vectors[4].y.toFixed(args.decimals)}j + ${vectors[4].z.toFixed(args.decimals)}k
+    b' = v2 - v1 = ${vectors[5].x.toFixed(args.decimals)}i + ${vectors[5].y.toFixed(args.decimals)}j + ${vectors[5].z.toFixed(args.decimals)}k
+
+    | v1 | = ${Utils.calculateVectorLenght(vectors[0]).toFixed(args.decimals)}
+    | v2 | = ${Utils.calculateVectorLenght(vectors[1]).toFixed(args.decimals)}
+    | a | = ${Utils.calculateVectorLenght(vectors[3]).toFixed(args.decimals)}
+    | b | = | b' | = ${Utils.calculateVectorLenght(vectors[4]).toFixed(args.decimals)}
+    | c | = ${Utils.calculateVectorLenght(vectors[2]).toFixed(args.decimals)}
+    
+    c = v1 ✕ v2 = ${vectors[2].x.toFixed(args.decimals)}i + ${vectors[2].y.toFixed(args.decimals)}j + ${vectors[2].z.toFixed(args.decimals)}k
+    v1 • v2 = ${Utils.calculateDotProduct(vectors[0],vectors[1]).toFixed(args.decimals)}
+    ` ;
+}   
+
+function updateTableOfAngles() {
+    let angleV1V2 = Utils.calculageAngle(vectors[0],vectors[1]);
 
     let angleV1x = Utils.calculageAngle(vectors[0],Utils.createVector(1,0,0));
     let angleV1y = Utils.calculageAngle(vectors[0],Utils.createVector(0,1,0));
@@ -240,46 +266,112 @@ function updateInfoPanel() {
     let angleBCommaY = Utils.calculageAngle(vectors[5],Utils.createVector(0,1,0));
     let angleBCommaZ = Utils.calculageAngle(vectors[5],Utils.createVector(0,0,1));
 
-    infoPanelDOM.innerText = `v1 = ${vectors[0].x.toFixed(args.decimals)}i + ${vectors[0].y.toFixed(args.decimals)}j + ${vectors[0].z.toFixed(args.decimals)}k
-    v2 = ${vectors[1].x.toFixed(args.decimals)}i + ${vectors[1].y.toFixed(args.decimals)}j + ${vectors[1].z.toFixed(args.decimals)}k
+    let angleV1a = Utils.calculageAngle(vectors[0],vectors[3]);
+    let angleV1b = Utils.calculageAngle(vectors[0],vectors[4]);
+    let angleV1bComma = Utils.calculageAngle(vectors[0],vectors[5]);
 
-    a = v1 + v2 = ${vectors[3].x.toFixed(args.decimals)}i + ${vectors[3].y.toFixed(args.decimals)}j + ${vectors[3].z.toFixed(args.decimals)}k
-    b = v1 - v2 = ${vectors[4].x.toFixed(args.decimals)}i + ${vectors[4].y.toFixed(args.decimals)}j + ${vectors[4].z.toFixed(args.decimals)}k
-    b' = v2 - v1 = ${vectors[5].x.toFixed(args.decimals)}i + ${vectors[5].y.toFixed(args.decimals)}j + ${vectors[5].z.toFixed(args.decimals)}k
+    let angleV2a = Utils.calculageAngle(vectors[1],vectors[3]);
+    let angleV2b = Utils.calculageAngle(vectors[1],vectors[4]);
+    let angleV2bComma = Utils.calculageAngle(vectors[1],vectors[5]);
 
-    | v1 | = ${Utils.calculateVectorLenght(vectors[0]).toFixed(args.decimals)}
-    | v2 | = ${Utils.calculateVectorLenght(vectors[1]).toFixed(args.decimals)}
-    | a | = ${Utils.calculateVectorLenght(vectors[3]).toFixed(args.decimals)}
-    | b | = | b' | = ${Utils.calculateVectorLenght(vectors[4]).toFixed(args.decimals)}
-    | c | = ${Utils.calculateVectorLenght(vectors[2]).toFixed(args.decimals)}
-    
-    c = v1 ✕ v2 = ${vectors[2].x.toFixed(args.decimals)}i + ${vectors[2].y.toFixed(args.decimals)}j + ${vectors[2].z.toFixed(args.decimals)}k
-    v1 • v2 = ${Utils.calculateDotProduct(vectors[0],vectors[1]).toFixed(args.decimals)}
+    let angleAc = Utils.calculageAngle(vectors[3],vectors[2]);
+    let angleBc = Utils.calculageAngle(vectors[4],vectors[2]);
+    let angleBCommaC = Utils.calculageAngle(vectors[5],vectors[2]);
 
-    v1 ∠ v2 = ${(angle * 180 / Math.PI).toFixed(args.decimals)}° (${angle.toFixed(args.decimals)} rad)
+    let angleAb = Utils.calculageAngle(vectors[3],vectors[4]);
+    let angleAbComma = Utils.calculageAngle(vectors[3],vectors[5]);
 
-    v1 ∠ X = ${(angleV1x * 180 / Math.PI).toFixed(args.decimals)}° (${angleV1x.toFixed(args.decimals)} rad)
-    v1 ∠ Y = ${(angleV1y * 180 / Math.PI).toFixed(args.decimals)}° (${angleV1y.toFixed(args.decimals)} rad)
-    v1 ∠ Z = ${(angleV1z * 180 / Math.PI).toFixed(args.decimals)}° (${angleV1z.toFixed(args.decimals)} rad)
+    let degToRadSwitch = 1;
+    let angleSign = "rad";
+    if(args.anglesInRad == 0) {
+        degToRadSwitch = 180 / Math.PI;
+        angleSign = "°";
+    }
 
-    v2 ∠ X = ${(angleV2x * 180 / Math.PI).toFixed(args.decimals)}° (${angleV2x.toFixed(args.decimals)} rad)
-    v2 ∠ Y = ${(angleV2y * 180 / Math.PI).toFixed(args.decimals)}° (${angleV2y.toFixed(args.decimals)} rad)
-    v2 ∠ Z = ${(angleV2z * 180 / Math.PI).toFixed(args.decimals)}° (${angleV2z.toFixed(args.decimals)} rad)
-
-    c ∠ X = ${(angleCx * 180 / Math.PI).toFixed(args.decimals)}° (${angleCx.toFixed(args.decimals)} rad)
-    c ∠ Y = ${(angleCy * 180 / Math.PI).toFixed(args.decimals)}° (${angleCy.toFixed(args.decimals)} rad)
-    c ∠ Z = ${(angleCz * 180 / Math.PI).toFixed(args.decimals)}° (${angleCz.toFixed(args.decimals)} rad)
-
-    a ∠ X = ${(angleAx * 180 / Math.PI).toFixed(args.decimals)}° (${angleCx.toFixed(args.decimals)} rad)
-    a ∠ Y = ${(angleAy * 180 / Math.PI).toFixed(args.decimals)}° (${angleCy.toFixed(args.decimals)} rad)
-    a ∠ Z = ${(angleAz * 180 / Math.PI).toFixed(args.decimals)}° (${angleCz.toFixed(args.decimals)} rad)
-
-    b ∠ X = ${(angleBx * 180 / Math.PI).toFixed(args.decimals)}° (${angleCx.toFixed(args.decimals)} rad)
-    b ∠ Y = ${(angleBy * 180 / Math.PI).toFixed(args.decimals)}° (${angleCy.toFixed(args.decimals)} rad)
-    b ∠ Z = ${(angleBz * 180 / Math.PI).toFixed(args.decimals)}° (${angleCz.toFixed(args.decimals)} rad)
-
-    b' ∠ X = ${(angleBCommaX * 180 / Math.PI).toFixed(args.decimals)}° (${angleCx.toFixed(args.decimals)} rad)
-    b' ∠ Y = ${(angleBCommaY * 180 / Math.PI).toFixed(args.decimals)}° (${angleCy.toFixed(args.decimals)} rad)
-    b' ∠ Z = ${(angleBCommaZ * 180 / Math.PI).toFixed(args.decimals)}° (${angleCz.toFixed(args.decimals)} rad)
+    tableOfAnglesDOM.innerHTML = `   
+    <tr>
+        <td>∠ ${angleSign}</td>
+        <td> v1 </td>
+        <td> v2 </td>
+        <td> a </td>
+        <td> b </td>
+        <td> b' </td>
+        <td> c </td>
+        <td> X </td>
+        <td> Y </td>
+        <td> Z </td>
+    <tr>
+    <tr>
+        <td> v1 </td>
+        <td> ${ZERO.toFixed(args.decimals)}</td>
+        <td> ${(angleV1V2 * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleV1a * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleV1b * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleV1bComma * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleV1x * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleV1y * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleV1z * degToRadSwitch).toFixed(args.decimals)}</td>
+    </tr>
+    <tr>
+        <td> v2 </td>
+        <td> ${(angleV1V2 * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${ZERO.toFixed(args.decimals)}</td>
+        <td> ${(angleV2a * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleV2b * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleV2bComma * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleV2x * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleV2y * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleV2z * degToRadSwitch).toFixed(args.decimals)}</td>
+    </tr>
+    <tr>
+        <td> a </td>
+        <td> ${(angleV1a * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleV2a * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${ZERO.toFixed(args.decimals)}</td>
+        <td> ${(angleAb * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleAbComma * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleAc * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleAx * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleAy * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleAz * degToRadSwitch).toFixed(args.decimals)}</td>
+    <tr>
+    <tr>
+        <td> b </td>
+        <td> ${(angleV1b * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleV2b * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleAb * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${ZERO.toFixed(args.decimals)}</td>
+        <td> ${(Math.PI * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleBc * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleBx * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleBy * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleBz * degToRadSwitch).toFixed(args.decimals)}</td>
+    </tr>
+    <tr>
+        <td> b' </td>
+        <td> ${(angleV1bComma * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleV2bComma * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleAbComma * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(Math.PI * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${ZERO.toFixed(args.decimals)}</td>
+        <td> ${(angleBCommaC * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleBCommaX * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleBCommaY * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleBCommaZ * degToRadSwitch).toFixed(args.decimals)}</td>
+    </tr>
+    <tr>
+        <td> c </td>
+        <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleAc * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleBc * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleBCommaC * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${ZERO.toFixed(args.decimals)}</td>
+        <td> ${(angleCx * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleCy * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleCz * degToRadSwitch).toFixed(args.decimals)}</td>
+    <tr>     
     `;
-}   
+}
