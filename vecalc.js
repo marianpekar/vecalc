@@ -31,7 +31,7 @@ let args = {
     showAxis: true,
     showGrid: false,
     showNormalized: false,
-    anglesInRad: 0
+    anglesInRad: false
 }
 
 // DOMs live here
@@ -73,7 +73,6 @@ function init() {
     document.addEventListener( 'keydown', onKeyDown, false );
     document.addEventListener( 'mousemove', onMouseMove, false );
     document.addEventListener( 'wheel', onWheel, false);
-    document.addEventListener( 'load', onLoad, false);
 }
 
 function draw() {
@@ -202,10 +201,6 @@ function onMouseMove() {
     updateLabels();
 }
 
-function onLoad() {
-    updateLabels();
-}
-
 function onWheel() {
     updateLabels();
 }
@@ -288,16 +283,11 @@ function updateTableOfAngles() {
     let angleAb = Utils.calculageAngle(vectors[3],vectors[4]);
     let angleAbComma = Utils.calculageAngle(vectors[3],vectors[5]);
 
-    let degToRadSwitch = 1;
-    let angleSign = "rad";
-    if(args.anglesInRad == 0) {
-        degToRadSwitch = 180 / Math.PI;
-        angleSign = "°";
-    }
-
+    let degToRadSwitch = args.anglesInRad ? 1 : 180 / Math.PI;
+    
     tableOfAnglesDOM.innerHTML = `   
     <tr>
-        <td>∠ ${angleSign}</td>
+        <td>∠ ${args.anglesInRad ? "rad" : "°"}</td>
         <td> v1 </td>
         <td> v2 </td>
         <td> a </td>
