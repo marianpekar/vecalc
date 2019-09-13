@@ -62,7 +62,7 @@ canvas { display: block; width: 100%; height: 100% }
 }
 
 #table-of-angles td {
-    width: 50px;
+    width: 66px;
     text-align: center;
     border: 1px solid aliceblue;  
 }
