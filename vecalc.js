@@ -72,6 +72,7 @@ function init() {
     window.addEventListener( 'resize', onResize, false );
     document.addEventListener( 'keydown', onKeyDown, false );
     document.addEventListener( 'mousemove', onMouseMove, false );
+    renderer.domElement.addEventListener( 'touchmove', onTouchMove, false );
     renderer.domElement.addEventListener( 'wheel', onWheel, false);
 }
 
@@ -202,6 +203,10 @@ function onMouseMove() {
 }
 
 function onWheel() {
+    updateLabels();
+}
+
+function onTouchMove() {
     updateLabels();
 }
 
