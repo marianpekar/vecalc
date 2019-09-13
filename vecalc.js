@@ -4,7 +4,7 @@ const AXIS_LENGHT = 10;
 
 const GRID_SIZE = 20;
 const GRID_DIVISION = 20;
-const AXIS_OFFSET = 0.001; // to construct axis with two lines close to each other and avoid overlap with grid 
+const AXIS_OFFSET = 0.0001; // to construct axis with two lines close to each other and avoid overlap with grid 
 
 const ZERO = 0;
 const RIGHT_ANGLE_RAD = 90 * Math.PI / 180;
