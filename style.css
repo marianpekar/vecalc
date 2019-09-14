@@ -68,6 +68,10 @@ canvas { display: block; width: 100%; height: 100% }
     border: 1px solid aliceblue;  
 }
 
+#table-of-angles tr:hover {
+    background-color: blueviolet;
+}
+
 #dat-gui-container {
     position: absolute;
     top: 0px;
