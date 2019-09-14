@@ -12,6 +12,13 @@ vector2Folder.add(args, 'v2y', -10, 10).name("Y").step(0.1).onChange(draw);
 vector2Folder.add(args, 'v2z', -10, 10).name("Z").step(0.1).onChange(draw);
 vector2Folder.open();
 
+let productsFolder = gui.addFolder("Show products");
+productsFolder.add(args, 'showV1plusV2').name("a = v1 + v2").onChange(draw);
+productsFolder.add(args, 'showV1minusV2').name("b = v1 - v2").onChange(draw);
+productsFolder.add(args, 'showV2minusV1').name("b' = v2 - v1").onChange(draw);
+productsFolder.add(args, 'showV1crossV2').name("c = v1 ✕ v2").onChange(draw);
+productsFolder.add(args, 'showV2crossV1').name("c' = v2 ✕ v1").onChange(draw);
+
 gui.add(args, 'showAxis').name("Show Axis").onChange(draw);
 gui.add(args, 'showGrid').name("Show Grid").onChange(draw);
 gui.add(args, 'showNormalized').name("Show Normalized").onChange(draw);

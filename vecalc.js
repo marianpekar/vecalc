@@ -17,7 +17,6 @@ let vectors = [];
 let vectorsNorm = [];
 
 const windowHalf = new THREE.Vector2( window.innerWidth / 2, window.innerHeight / 2 );
-let radius = 13;
 
 let args = {
     v1x: 1,
@@ -31,7 +30,12 @@ let args = {
     showGrid: true,
     showNormalized: false,
     anglesInRad: false,
-    showResults: true
+    showResults: true,
+    showV1crossV2: true,
+    showV2crossV1: true,
+    showV1plusV2: true,
+    showV1minusV2: true,
+    showV2minusV1: true
 }
 
 // DOMs live here
@@ -83,13 +87,13 @@ function draw() {
     vectors = [];
     clearScene();
 
-    vectors.push(Utils.createVector(args.v1x,args.v1y,args.v1z)); // 0 = 0
-    vectors.push(Utils.createVector(args.v2x,args.v2y,args.v2z)); // 1 = 1
-    vectors.push(Utils.createCrossProduct(vectors[0], vectors[1])); // 2 = 0 x 1
-    vectors.push(Utils.add(vectors[0], vectors[1])); // 3 = 0 + 1
-    vectors.push(Utils.subtract(vectors[0], vectors[1])); // 4 = 0 - 1
-    vectors.push(Utils.subtract(vectors[1], vectors[0])); // 5 = 1 - 0
-    vectors.push(Utils.createCrossProduct(vectors[1],vectors[0])) // 6 = 1 x 0
+    vectors.push(Utils.createVector(args.v1x,args.v1y,args.v1z)); // 0 = v1
+    vectors.push(Utils.createVector(args.v2x,args.v2y,args.v2z)); // 1 = v2
+    vectors.push(Utils.createCrossProduct(vectors[0], vectors[1])); // 2 = v1 x v2
+    vectors.push(Utils.add(vectors[0], vectors[1])); // 3 = v1 + v2
+    vectors.push(Utils.subtract(vectors[0], vectors[1])); // 4 = v1 - v2
+    vectors.push(Utils.subtract(vectors[1], vectors[0])); // 5 = v2 - v1
+    vectors.push(Utils.createCrossProduct(vectors[1],vectors[0])) // 6 = v2 x v1
 
     if(args.showNormalized) {
         vectorsNorm = [];
@@ -164,6 +168,16 @@ function updateLabels() {
 
     cLabelDOM.setAttribute('style',`left: ${cScreenPos.x + LABEL_X_OFFSET}px; top: ${cScreenPos.y}px`);
     cCommaLabelDOM.setAttribute('style',`left: ${cCommaScreenPos.x + LABEL_X_OFFSET}px; top: ${cCommaScreenPos.y}px`);
+
+    updateLabelsVisibility();
+}
+
+function updateLabelsVisibility() {
+    if(!args.showV1plusV2) aLabelDOM.style.visibility = "hidden"; else aLabelDOM.style.visibility = "visible";
+    if(!args.showV1minusV2) bLabelDOM.style.visibility = "hidden"; else bLabelDOM.style.visibility = "visible"; 
+    if(!args.showV2minusV1) bCommaLabelDOM.style.visibility = "hidden"; else bCommaLabelDOM.style.visibility = "visible";  
+    if(!args.showV1crossV2) cLabelDOM.style.visibility = "hidden"; else cLabelDOM.style.visibility = "visible";
+    if(!args.showV2crossV1) cCommaLabelDOM.style.visibility = "hidden"; else cCommaLabelDOM.style.visibility = "visible";
 }
 
 function clearScene() {
@@ -179,6 +193,13 @@ function drawAxis() {
 
 function drawVectors() {
     for(let i = 0; i < vectors.length; i++) {
+
+        if(i == 2 && !args.showV1crossV2) continue;
+        if(i == 3 && !args.showV1plusV2) continue;
+        if(i == 4 && !args.showV1minusV2) continue;
+        if(i == 5 && !args.showV2minusV1) continue;
+        if(i == 6 && !args.showV2crossV1) continue;
+
         let geometry = new THREE.Geometry();
         geometry.vertices.push(scene.position);
 
