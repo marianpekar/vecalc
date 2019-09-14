@@ -32,10 +32,10 @@ let args = {
     anglesInRad: false,
     showResults: true,
     showV1crossV2: true,
-    showV2crossV1: true,
+    showV2crossV1: false,
     showV1plusV2: true,
     showV1minusV2: true,
-    showV2minusV1: true
+    showV2minusV1: false
 }
 
 // DOMs live here
