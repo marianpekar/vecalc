@@ -8,6 +8,7 @@ const AXIS_OFFSET = 0.0001; // to construct axis with two lines close to each ot
 
 const ZERO = 0;
 const RIGHT_ANGLE_RAD = 90 * Math.PI / 180;
+const RIGHT_ANGLE_CC_RAD = 270 * Math.PI / 180;
 const PI_DEG = 180;
 
 let camera, scene, raycaster, renderer, container, controls;
@@ -42,6 +43,7 @@ let bLabelDOM = document.getElementById("b-label");
 let bCommaLabelDOM = document.getElementById("b-comma-label")
 
 let cLabelDOM = document.getElementById("c-label");
+let cCommaLabelDOM = document.getElementById("c-comma-label");
 
 let resultsDOM = document.getElementById("results");
     let infoPanelDOM = document.getElementById("info-panel");
@@ -87,6 +89,7 @@ function draw() {
     vectors.push(Utils.add(vectors[0], vectors[1])); // 3 = 0 + 1
     vectors.push(Utils.subtract(vectors[0], vectors[1])); // 4 = 0 - 1
     vectors.push(Utils.subtract(vectors[1], vectors[0])); // 5 = 1 - 0
+    vectors.push(Utils.createCrossProduct(vectors[1],vectors[0])) // 6 = 1 x 0
 
     if(args.showNormalized) {
         vectorsNorm = [];
@@ -96,6 +99,7 @@ function draw() {
         vectorsNorm.push(Utils.normalize(Utils.add(vectors[0], vectors[1])));
         vectorsNorm.push(Utils.normalize(Utils.subtract(vectors[0], vectors[1])));
         vectorsNorm.push(Utils.normalize(Utils.subtract(vectors[1], vectors[0])));
+        vectorsNorm.push(Utils.normalize(Utils.createCrossProduct(vectors[1], vectors[0])));
     }
 
     if(args.showAxis)
@@ -131,30 +135,35 @@ function drawGrid() {
 function updateLabels() {
     let v1ScreenPos = getScreenPos(new THREE.Vector3(vectors[0].x, vectors[0].y, vectors[0].z));
     let v2ScreenPos = getScreenPos(new THREE.Vector3(vectors[1].x, vectors[1].y, vectors[1].z));
-
-    let cScreenPos = getScreenPos(new THREE.Vector3(vectors[2].x, vectors[2].y, vectors[2].z));
     
     let aScreenPos = getScreenPos(new THREE.Vector3(vectors[3].x, vectors[3].y, vectors[3].z));
     let bScreenPos = getScreenPos(new THREE.Vector3(vectors[4].x, vectors[4].y, vectors[4].z));
     let bCommaScreenPos = getScreenPos(new THREE.Vector3(vectors[5].x, vectors[5].y, vectors[5].z));
 
+    let cScreenPos = getScreenPos(new THREE.Vector3(vectors[2].x, vectors[2].y, vectors[2].z));
+    let cCommaScreenPos = getScreenPos(new THREE.Vector3(vectors[6].x, vectors[6].y, vectors[6].z));
+
     if(args.showNormalized) {
         v1ScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[0].x, vectorsNorm[0].y, vectorsNorm[0].z));
         v2ScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[1].x, vectorsNorm[1].y, vectorsNorm[1].z));
-        cScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[2].x, vectorsNorm[2].y, vectorsNorm[2].z));
+
         aScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[3].x, vectorsNorm[3].y, vectorsNorm[3].z));
         bScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[4].x, vectorsNorm[4].y, vectorsNorm[4].z));
-        bCommaScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[5].x, vectorsNorm[5].y, vectorsNorm[5].z));    
+        bCommaScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[5].x, vectorsNorm[5].y, vectorsNorm[5].z));
+
+        cScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[2].x, vectorsNorm[2].y, vectorsNorm[2].z));
+        cCommaScreenPos = getScreenPos(new THREE.Vector3(vectorsNorm[6].x, vectorsNorm[6].y, vectorsNorm[6].z));    
     }
 
     v1LabelDOM.setAttribute('style',`left: ${v1ScreenPos.x + LABEL_X_OFFSET}px; top: ${v1ScreenPos.y}px`);
     v2LabelDOM.setAttribute('style',`left: ${v2ScreenPos.x + LABEL_X_OFFSET}px; top: ${v2ScreenPos.y}px`);
 
-    cLabelDOM.setAttribute('style',`left: ${cScreenPos.x + LABEL_X_OFFSET}px; top: ${cScreenPos.y}px`);
-
     aLabelDOM.setAttribute('style',`left: ${aScreenPos.x + LABEL_X_OFFSET}px; top: ${aScreenPos.y}px`);
     bLabelDOM.setAttribute('style',`left: ${bScreenPos.x + LABEL_X_OFFSET}px; top: ${bScreenPos.y}px`);
     bCommaLabelDOM.setAttribute('style',`left: ${bCommaScreenPos.x + LABEL_X_OFFSET}px; top: ${bCommaScreenPos.y}px`);
+
+    cLabelDOM.setAttribute('style',`left: ${cScreenPos.x + LABEL_X_OFFSET}px; top: ${cScreenPos.y}px`);
+    cCommaLabelDOM.setAttribute('style',`left: ${cCommaScreenPos.x + LABEL_X_OFFSET}px; top: ${cCommaScreenPos.y}px`);
 }
 
 function clearScene() {
@@ -252,13 +261,15 @@ function updateInfoPanel() {
     b' = v2 - v1 = ${vectors[5].x.toFixed(args.decimals)}i + ${vectors[5].y.toFixed(args.decimals)}j + ${vectors[5].z.toFixed(args.decimals)}k
 
     c = v1 ✕ v2 = ${vectors[2].x.toFixed(args.decimals)}i + ${vectors[2].y.toFixed(args.decimals)}j + ${vectors[2].z.toFixed(args.decimals)}k
-    v1 • v2 = ${Utils.calculateDotProduct(vectors[0],vectors[1]).toFixed(args.decimals)}
+    c' = v2 ✕ v1 = ${vectors[6].x.toFixed(args.decimals)}i + ${vectors[6].y.toFixed(args.decimals)}j + ${vectors[6].z.toFixed(args.decimals)}k
+    
+    v1 • v2 = v2 • v1 = ${Utils.calculateDotProduct(vectors[0],vectors[1]).toFixed(args.decimals)}
 
     | v1 | = ${Utils.calculateVectorLenght(vectors[0]).toFixed(args.decimals)}
     | v2 | = ${Utils.calculateVectorLenght(vectors[1]).toFixed(args.decimals)}
     | a | = ${Utils.calculateVectorLenght(vectors[3]).toFixed(args.decimals)}
     | b | = | b' | = ${Utils.calculateVectorLenght(vectors[4]).toFixed(args.decimals)}
-    | c | = ${Utils.calculateVectorLenght(vectors[2]).toFixed(args.decimals)}
+    | c | = | c' | = ${Utils.calculateVectorLenght(vectors[2]).toFixed(args.decimals)}
     ` ;
 }   
 
@@ -289,6 +300,10 @@ function updateTableOfAngles() {
     let angleBCommaY = Utils.calculageAngle(vectors[5],Utils.createVector(0,1,0));
     let angleBCommaZ = Utils.calculageAngle(vectors[5],Utils.createVector(0,0,1));
 
+    let angleCCommaX = Utils.calculageAngle(vectors[6],Utils.createVector(1,0,0));
+    let angleCCommaY = Utils.calculageAngle(vectors[6],Utils.createVector(0,1,0));
+    let angleCCommaZ = Utils.calculageAngle(vectors[6],Utils.createVector(0,0,1));
+
     let angleV1a = Utils.calculageAngle(vectors[0],vectors[3]);
     let angleV1b = Utils.calculageAngle(vectors[0],vectors[4]);
     let angleV1bComma = Utils.calculageAngle(vectors[0],vectors[5]);
@@ -311,6 +326,7 @@ function updateTableOfAngles() {
         <td> b </td>
         <td> b' </td>
         <td> c </td>
+        <td> c' </td>
         <td> X </td>
         <td> Y </td>
         <td> Z </td>
@@ -323,6 +339,7 @@ function updateTableOfAngles() {
         <td> ${(angleV1b * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleV1bComma * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(RIGHT_ANGLE_CC_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleV1x * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleV1y * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleV1z * degToRadSwitch).toFixed(args.decimals)}</td>
@@ -335,6 +352,7 @@ function updateTableOfAngles() {
         <td> ${(angleV2b * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleV2bComma * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(RIGHT_ANGLE_CC_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleV2x * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleV2y * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleV2z * degToRadSwitch).toFixed(args.decimals)}</td>
@@ -347,6 +365,7 @@ function updateTableOfAngles() {
         <td> ${(angleAb * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleAbComma * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(RIGHT_ANGLE_CC_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleAx * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleAy * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleAz * degToRadSwitch).toFixed(args.decimals)}</td>
@@ -359,6 +378,7 @@ function updateTableOfAngles() {
         <td> ${ZERO.toFixed(args.decimals)}</td>
         <td> ${(Math.PI * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(RIGHT_ANGLE_CC_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleBx * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleBy * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleBz * degToRadSwitch).toFixed(args.decimals)}</td>
@@ -371,6 +391,7 @@ function updateTableOfAngles() {
         <td> ${(Math.PI * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${ZERO.toFixed(args.decimals)}</td>
         <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(RIGHT_ANGLE_CC_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleBCommaX * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleBCommaY * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleBCommaZ * degToRadSwitch).toFixed(args.decimals)}</td>
@@ -383,9 +404,23 @@ function updateTableOfAngles() {
         <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${ZERO.toFixed(args.decimals)}</td>
+        <td> ${PI_DEG.toFixed(args.decimals)}</td>
         <td> ${(angleCx * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleCy * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleCz * degToRadSwitch).toFixed(args.decimals)}</td>
-    <tr>     
+    <tr>
+    <tr>
+        <td> c' </td>
+        <td> ${(RIGHT_ANGLE_CC_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(RIGHT_ANGLE_CC_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(RIGHT_ANGLE_CC_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(RIGHT_ANGLE_CC_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(RIGHT_ANGLE_CC_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${PI_DEG.toFixed(args.decimals)}</td>
+        <td> ${ZERO.toFixed(args.decimals)}</td>
+        <td> ${(angleCCommaX * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleCCommaY * degToRadSwitch).toFixed(args.decimals)}</td>
+        <td> ${(angleCCommaZ * degToRadSwitch).toFixed(args.decimals)}</td>
+    <tr>       
     `;
 }
