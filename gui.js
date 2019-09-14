@@ -1,4 +1,4 @@
-let gui = new dat.GUI();
+let gui = new dat.GUI({ autoPlace: false });
 
 let vector1Folder = gui.addFolder("v1")
 vector1Folder.add(args, 'v1x', -10, 10).name("X").step(0.1).onChange(draw);
@@ -17,3 +17,6 @@ gui.add(args, 'showGrid').name("Show Grid").onChange(draw);
 gui.add(args, 'showNormalized').name("Show Normalized").onChange(draw);
 gui.add(args, 'anglesInRad').name("Angles In Rad").onChange(draw);
 gui.add(args, 'decimals', 1, 5).name("Decimals").step(1).onChange(draw);
+
+let guiContainerDOM = document.getElementById('dat-gui-container');
+guiContainerDOM.appendChild(gui.domElement);
