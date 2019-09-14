@@ -25,6 +25,8 @@ let args = {
     v2x: 3,
     v2y: 2,
     v2z: 1,
+    t: 1,
+    u: 1,
     decimals: 2,
     showAxis: true,
     showGrid: true,
@@ -87,8 +89,8 @@ function draw() {
     vectors = [];
     clearScene();
 
-    vectors.push(Utils.createVector(args.v1x,args.v1y,args.v1z)); // 0 = v1
-    vectors.push(Utils.createVector(args.v2x,args.v2y,args.v2z)); // 1 = v2
+    vectors.push(Utils.createVector(args.v1x * args.t, args.v1y * args.t, args.v1z * args.t)); // 0 = v1
+    vectors.push(Utils.createVector(args.v2x * args.u, args.v2y * args.u, args.v2z * args.u)); // 1 = v2
     vectors.push(Utils.createCrossProduct(vectors[0], vectors[1])); // 2 = v1 x v2
     vectors.push(Utils.add(vectors[0], vectors[1])); // 3 = v1 + v2
     vectors.push(Utils.subtract(vectors[0], vectors[1])); // 4 = v1 - v2
@@ -97,8 +99,8 @@ function draw() {
 
     if(args.showNormalized) {
         vectorsNorm = [];
-        vectorsNorm.push(Utils.normalize(Utils.createVector(args.v1x,args.v1y,args.v1z)));
-        vectorsNorm.push(Utils.normalize(Utils.createVector(args.v2x,args.v2y,args.v2z)));
+        vectorsNorm.push(Utils.normalize(Utils.createVector(args.v1x * args.t, args.v1y * args.t, args.v1z * args.t)));
+        vectorsNorm.push(Utils.normalize(Utils.createVector(args.v2x * args.u, args.v2y * args.u, args.v2z * args.u)));
         vectorsNorm.push(Utils.normalize(Utils.createCrossProduct(vectors[0], vectors[1])));
         vectorsNorm.push(Utils.normalize(Utils.add(vectors[0], vectors[1])));
         vectorsNorm.push(Utils.normalize(Utils.subtract(vectors[0], vectors[1])));
@@ -274,20 +276,20 @@ function animate() {
 }
 
 function updateInfoPanel() {
-    infoPanelDOM.innerText = `v1 = ${vectors[0].x.toFixed(args.decimals)}i + ${vectors[0].y.toFixed(args.decimals)}j + ${vectors[0].z.toFixed(args.decimals)}k
-    v2 = ${vectors[1].x.toFixed(args.decimals)}i + ${vectors[1].y.toFixed(args.decimals)}j + ${vectors[1].z.toFixed(args.decimals)}k
+    infoPanelDOM.innerText = `v1 * ${args.t.toFixed(args.decimals)} = ${vectors[0].x.toFixed(args.decimals)}i + ${vectors[0].y.toFixed(args.decimals)}j + ${vectors[0].z.toFixed(args.decimals)}k
+    v2 * ${args.u.toFixed(args.decimals)} = ${vectors[1].x.toFixed(args.decimals)}i + ${vectors[1].y.toFixed(args.decimals)}j + ${vectors[1].z.toFixed(args.decimals)}k
 
-    a = v1 + v2 = ${vectors[3].x.toFixed(args.decimals)}i + ${vectors[3].y.toFixed(args.decimals)}j + ${vectors[3].z.toFixed(args.decimals)}k
-    b = v1 - v2 = ${vectors[4].x.toFixed(args.decimals)}i + ${vectors[4].y.toFixed(args.decimals)}j + ${vectors[4].z.toFixed(args.decimals)}k
-    b' = v2 - v1 = ${vectors[5].x.toFixed(args.decimals)}i + ${vectors[5].y.toFixed(args.decimals)}j + ${vectors[5].z.toFixed(args.decimals)}k
+    a = v1 * ${args.t.toFixed(args.decimals)} + v2 * ${args.u.toFixed(args.decimals)} = ${vectors[3].x.toFixed(args.decimals)}i + ${vectors[3].y.toFixed(args.decimals)}j + ${vectors[3].z.toFixed(args.decimals)}k
+    b = v1 * ${args.t.toFixed(args.decimals)} - v2 * ${args.u.toFixed(args.decimals)} = ${vectors[4].x.toFixed(args.decimals)}i + ${vectors[4].y.toFixed(args.decimals)}j + ${vectors[4].z.toFixed(args.decimals)}k
+    b' = v2 * ${args.u.toFixed(args.decimals)} - v1 * ${args.t.toFixed(args.decimals)} = ${vectors[5].x.toFixed(args.decimals)}i + ${vectors[5].y.toFixed(args.decimals)}j + ${vectors[5].z.toFixed(args.decimals)}k
 
-    c = v1 ✕ v2 = ${vectors[2].x.toFixed(args.decimals)}i + ${vectors[2].y.toFixed(args.decimals)}j + ${vectors[2].z.toFixed(args.decimals)}k
-    c' = v2 ✕ v1 = ${vectors[6].x.toFixed(args.decimals)}i + ${vectors[6].y.toFixed(args.decimals)}j + ${vectors[6].z.toFixed(args.decimals)}k
+    c = v1 * ${args.t.toFixed(args.decimals)} ✕ v2 * ${args.u.toFixed(args.decimals)} = ${vectors[2].x.toFixed(args.decimals)}i + ${vectors[2].y.toFixed(args.decimals)}j + ${vectors[2].z.toFixed(args.decimals)}k
+    c' = v2 * ${args.u.toFixed(args.decimals)} ✕ v1 * ${args.t.toFixed(args.decimals)} = ${vectors[6].x.toFixed(args.decimals)}i + ${vectors[6].y.toFixed(args.decimals)}j + ${vectors[6].z.toFixed(args.decimals)}k
     
-    v1 • v2 = v2 • v1 = ${Utils.calculateDotProduct(vectors[0],vectors[1]).toFixed(args.decimals)}
+    v1 * ${args.t.toFixed(args.decimals)} • v2 * ${args.u.toFixed(args.decimals)} = v2 * ${args.u.toFixed(args.decimals)} • v1 * ${args.t.toFixed(args.decimals)} = ${Utils.calculateDotProduct(vectors[0],vectors[1]).toFixed(args.decimals)}
 
-    | v1 | = ${Utils.calculateVectorLenght(vectors[0]).toFixed(args.decimals)}
-    | v2 | = ${Utils.calculateVectorLenght(vectors[1]).toFixed(args.decimals)}
+    | v1 * ${args.t.toFixed(args.decimals)} | = ${Utils.calculateVectorLenght(vectors[0]).toFixed(args.decimals)}
+    | v2 * ${args.u.toFixed(args.decimals)} | = ${Utils.calculateVectorLenght(vectors[1]).toFixed(args.decimals)}
     | a | = ${Utils.calculateVectorLenght(vectors[3]).toFixed(args.decimals)}
     | b | = | b' | = ${Utils.calculateVectorLenght(vectors[4]).toFixed(args.decimals)}
     | c | = | c' | = ${Utils.calculateVectorLenght(vectors[2]).toFixed(args.decimals)}

@@ -1,15 +1,17 @@
 let gui = new dat.GUI({ autoPlace: false });
 
-let vector1Folder = gui.addFolder("v1")
-vector1Folder.add(args, 'v1x', -10, 10).name("X").step(0.1).onChange(draw);
-vector1Folder.add(args, 'v1y', -10, 10).name("Y").step(0.1).onChange(draw);
-vector1Folder.add(args, 'v1z', -10, 10).name("Z").step(0.1).onChange(draw);
+let vector1Folder = gui.addFolder("v1 * t")
+vector1Folder.add(args, 'v1x', -10, 10).name("X").step(0.01).onChange(draw);
+vector1Folder.add(args, 'v1y', -10, 10).name("Y").step(0.01).onChange(draw);
+vector1Folder.add(args, 'v1z', -10, 10).name("Z").step(0.01).onChange(draw);
+vector1Folder.add(args, 't', -10, 10).name("t").step(0.01).onChange(draw);
 vector1Folder.open();
 
-let vector2Folder = gui.addFolder("v2")
-vector2Folder.add(args, 'v2x', -10, 10).name("X").step(0.1).onChange(draw);
-vector2Folder.add(args, 'v2y', -10, 10).name("Y").step(0.1).onChange(draw);
-vector2Folder.add(args, 'v2z', -10, 10).name("Z").step(0.1).onChange(draw);
+let vector2Folder = gui.addFolder("v2 * u")
+vector2Folder.add(args, 'v2x', -10, 10).name("X").step(0.01).onChange(draw);
+vector2Folder.add(args, 'v2y', -10, 10).name("Y").step(0.01).onChange(draw);
+vector2Folder.add(args, 'v2z', -10, 10).name("Z").step(0.01).onChange(draw);
+vector2Folder.add(args, 'u', -10, 10).name("u").step(0.01).onChange(draw);
 vector2Folder.open();
 
 let productsFolder = gui.addFolder("Show products");
