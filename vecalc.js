@@ -29,12 +29,11 @@ let args = {
     showAxis: true,
     showGrid: true,
     showNormalized: false,
-    anglesInRad: false
+    anglesInRad: false,
+    showResults: true
 }
 
 // DOMs live here
-let infoPanelDOM = document.getElementById("info-panel");
-
 let v1LabelDOM = document.getElementById("v1-label");
 let v2LabelDOM = document.getElementById("v2-label");
 
@@ -44,7 +43,9 @@ let bCommaLabelDOM = document.getElementById("b-comma-label")
 
 let cLabelDOM = document.getElementById("c-label");
 
-let tableOfAnglesDOM = document.getElementById("table-of-angles");
+let resultsDOM = document.getElementById("results");
+    let infoPanelDOM = document.getElementById("info-panel");
+    let tableOfAnglesDOM = document.getElementById("table-of-angles");
 // ---
 
 init();
@@ -104,9 +105,20 @@ function draw() {
         drawGrid();
     
     drawVectors();
+    updateLabels();
+
+    updateResults();
+}
+
+function updateResults() {
+    if(!args.showResults) {
+        resultsDOM.style.visibility = "hidden";
+        return;
+    }
+
+    resultsDOM.style.visibility = "visible";
 
     updateInfoPanel();
-    updateLabels();
     updateTableOfAngles();
 }
 

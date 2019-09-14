@@ -15,6 +15,7 @@ vector2Folder.open();
 gui.add(args, 'showAxis').name("Show Axis").onChange(draw);
 gui.add(args, 'showGrid').name("Show Grid").onChange(draw);
 gui.add(args, 'showNormalized').name("Show Normalized").onChange(draw);
+gui.add(args, 'showResults').name("Show Results").onChange(draw);
 gui.add(args, 'anglesInRad').name("Angles In Rad").onChange(draw);
 gui.add(args, 'decimals', 1, 5).name("Decimals").step(1).onChange(draw);
 
