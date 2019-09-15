@@ -9,7 +9,6 @@ const AXIS_OFFSET = 0.0001; // to construct axis with two lines close to each ot
 const ZERO = 0;
 const RIGHT_ANGLE_RAD = 90 * Math.PI / 180;
 const RIGHT_ANGLE_CC_RAD = 270 * Math.PI / 180;
-const PI_DEG = 180;
 
 let camera, scene, raycaster, renderer, container, controls;
 
@@ -343,11 +342,14 @@ function updateTableOfAngles() {
 
     let degToRadSwitch = args.anglesInRad ? 1 : 180 / Math.PI;
 
+    let t = args.t.toFixed(args.decimals) != 1 ? " * " + args.t.toFixed(args.decimals) : "";
+    let u = args.u.toFixed(args.decimals) != 1 ? " * " + args.u.toFixed(args.decimals) : "";
+
     tableOfAnglesDOM.innerHTML = `   
     <tr>
         <td>∠ ${args.anglesInRad ? "rad" : "°"}</td>
-        <td> v1 </td>
-        <td> v2 </td>
+        <td> v1${t} </td>
+        <td> v2${u} </td>
         <td> a </td>
         <td> b </td>
         <td> b' </td>
@@ -358,7 +360,7 @@ function updateTableOfAngles() {
         <td> Z </td>
     <tr>
     <tr>
-        <td> v1 </td>
+        <td> v1${t} </td>
         <td> ${ZERO.toFixed(args.decimals)}</td>
         <td> ${(angleV1V2 * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleV1a * degToRadSwitch).toFixed(args.decimals)}</td>
@@ -371,7 +373,7 @@ function updateTableOfAngles() {
         <td> ${(angleV1z * degToRadSwitch).toFixed(args.decimals)}</td>
     </tr>
     <tr>
-        <td> v2 </td>
+        <td> v2${u} </td>
         <td> ${(angleV1V2 * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${ZERO.toFixed(args.decimals)}</td>
         <td> ${(angleV2a * degToRadSwitch).toFixed(args.decimals)}</td>
@@ -430,7 +432,7 @@ function updateTableOfAngles() {
         <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(RIGHT_ANGLE_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${ZERO.toFixed(args.decimals)}</td>
-        <td> ${PI_DEG.toFixed(args.decimals)}</td>
+        <td> ${(Math.PI * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleCx * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleCy * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleCz * degToRadSwitch).toFixed(args.decimals)}</td>
@@ -442,7 +444,7 @@ function updateTableOfAngles() {
         <td> ${(RIGHT_ANGLE_CC_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(RIGHT_ANGLE_CC_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(RIGHT_ANGLE_CC_RAD * degToRadSwitch).toFixed(args.decimals)}</td>
-        <td> ${PI_DEG.toFixed(args.decimals)}</td>
+        <td> ${(Math.PI * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${ZERO.toFixed(args.decimals)}</td>
         <td> ${(angleCCommaX * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleCCommaY * degToRadSwitch).toFixed(args.decimals)}</td>
