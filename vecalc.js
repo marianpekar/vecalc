@@ -275,23 +275,23 @@ function animate() {
 }
 
 function updateInfoPanel() {
-    let t = args.t.toFixed(args.decimals) != 1 ? " * " + args.t.toFixed(args.decimals) : "";
-    let u = args.u.toFixed(args.decimals) != 1 ? " * " + args.u.toFixed(args.decimals) : "";
+    let t = args.t.toFixed(args.decimals) != 1 ? args.t.toFixed(args.decimals) : "";
+    let u = args.u.toFixed(args.decimals) != 1 ? args.u.toFixed(args.decimals) : "";
 
-    infoPanelDOM.innerText = `v1${t} = ${vectors[0].x.toFixed(args.decimals)}i + ${vectors[0].y.toFixed(args.decimals)}j + ${vectors[0].z.toFixed(args.decimals)}k
-    v2${u} = ${vectors[1].x.toFixed(args.decimals)}i + ${vectors[1].y.toFixed(args.decimals)}j + ${vectors[1].z.toFixed(args.decimals)}k
+    infoPanelDOM.innerText = `${t}v1 = ${vectors[0].x.toFixed(args.decimals)}i + ${vectors[0].y.toFixed(args.decimals)}j + ${vectors[0].z.toFixed(args.decimals)}k
+    ${u}v2 = ${vectors[1].x.toFixed(args.decimals)}i + ${vectors[1].y.toFixed(args.decimals)}j + ${vectors[1].z.toFixed(args.decimals)}k
 
-    a = v1${t} + v2${u} = ${vectors[3].x.toFixed(args.decimals)}i + ${vectors[3].y.toFixed(args.decimals)}j + ${vectors[3].z.toFixed(args.decimals)}k
-    b = v1${t} - v2${u} = ${vectors[4].x.toFixed(args.decimals)}i + ${vectors[4].y.toFixed(args.decimals)}j + ${vectors[4].z.toFixed(args.decimals)}k
-    b' = v2${u} - v1${t} = ${vectors[5].x.toFixed(args.decimals)}i + ${vectors[5].y.toFixed(args.decimals)}j + ${vectors[5].z.toFixed(args.decimals)}k
+    a = ${t}v1 + ${u}v2 = ${vectors[3].x.toFixed(args.decimals)}i + ${vectors[3].y.toFixed(args.decimals)}j + ${vectors[3].z.toFixed(args.decimals)}k
+    b = ${t}v1 - ${u}v2 = ${vectors[4].x.toFixed(args.decimals)}i + ${vectors[4].y.toFixed(args.decimals)}j + ${vectors[4].z.toFixed(args.decimals)}k
+    b' = ${u}v2 - ${t}v1 = ${vectors[5].x.toFixed(args.decimals)}i + ${vectors[5].y.toFixed(args.decimals)}j + ${vectors[5].z.toFixed(args.decimals)}k
 
-    c = v1${t} ✕ v2${u} = ${vectors[2].x.toFixed(args.decimals)}i + ${vectors[2].y.toFixed(args.decimals)}j + ${vectors[2].z.toFixed(args.decimals)}k
-    c' = v2${u} ✕ v1${t} = ${vectors[6].x.toFixed(args.decimals)}i + ${vectors[6].y.toFixed(args.decimals)}j + ${vectors[6].z.toFixed(args.decimals)}k
+    c = ${t}v1 ✕ ${u}v2 = ${vectors[2].x.toFixed(args.decimals)}i + ${vectors[2].y.toFixed(args.decimals)}j + ${vectors[2].z.toFixed(args.decimals)}k
+    c' = ${u}v2 ✕ ${t}v1 = ${vectors[6].x.toFixed(args.decimals)}i + ${vectors[6].y.toFixed(args.decimals)}j + ${vectors[6].z.toFixed(args.decimals)}k
     
-    v1${t} • v2${u} = v2${u} • v1${t} = ${Utils.calculateDotProduct(vectors[0],vectors[1]).toFixed(args.decimals)}
+    ${t}v1 • ${u}v2 = ${u}v2 • ${t}v1 = ${Utils.calculateDotProduct(vectors[0],vectors[1]).toFixed(args.decimals)}
 
-    | v1${t} | = ${Utils.calculateVectorLenght(vectors[0]).toFixed(args.decimals)}
-    | v2${u} | = ${Utils.calculateVectorLenght(vectors[1]).toFixed(args.decimals)}
+    | ${t}v1 | = ${Utils.calculateVectorLenght(vectors[0]).toFixed(args.decimals)}
+    | ${u}v2 | = ${Utils.calculateVectorLenght(vectors[1]).toFixed(args.decimals)}
     | a | = ${Utils.calculateVectorLenght(vectors[3]).toFixed(args.decimals)}
     | b | = | b' | = ${Utils.calculateVectorLenght(vectors[4]).toFixed(args.decimals)}
     | c | = | c' | = ${Utils.calculateVectorLenght(vectors[2]).toFixed(args.decimals)}
@@ -342,14 +342,14 @@ function updateTableOfAngles() {
 
     let degToRadSwitch = args.anglesInRad ? 1 : 180 / Math.PI;
 
-    let t = args.t.toFixed(args.decimals) != 1 ? " * " + args.t.toFixed(args.decimals) : "";
-    let u = args.u.toFixed(args.decimals) != 1 ? " * " + args.u.toFixed(args.decimals) : "";
+    let t = args.t.toFixed(args.decimals) != 1 ? args.t.toFixed(args.decimals) : "";
+    let u = args.u.toFixed(args.decimals) != 1 ? args.u.toFixed(args.decimals) : "";
 
     tableOfAnglesDOM.innerHTML = `   
     <tr>
         <td>∠ ${args.anglesInRad ? "rad" : "°"}</td>
-        <td> v1${t} </td>
-        <td> v2${u} </td>
+        <td> ${t}v1 </td>
+        <td> ${u}v2 </td>
         <td> a </td>
         <td> b </td>
         <td> b' </td>
@@ -360,7 +360,7 @@ function updateTableOfAngles() {
         <td> Z </td>
     <tr>
     <tr>
-        <td> v1${t} </td>
+        <td> ${t}v1 </td>
         <td> ${ZERO.toFixed(args.decimals)}</td>
         <td> ${(angleV1V2 * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${(angleV1a * degToRadSwitch).toFixed(args.decimals)}</td>
@@ -373,7 +373,7 @@ function updateTableOfAngles() {
         <td> ${(angleV1z * degToRadSwitch).toFixed(args.decimals)}</td>
     </tr>
     <tr>
-        <td> v2${u} </td>
+        <td> ${u}v2 </td>
         <td> ${(angleV1V2 * degToRadSwitch).toFixed(args.decimals)}</td>
         <td> ${ZERO.toFixed(args.decimals)}</td>
         <td> ${(angleV2a * degToRadSwitch).toFixed(args.decimals)}</td>
