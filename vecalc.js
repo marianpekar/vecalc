@@ -289,7 +289,7 @@ function updateInfoPanel() {
     c = v1${t} ✕ v2${u} = ${vectors[2].x.toFixed(args.decimals)}i + ${vectors[2].y.toFixed(args.decimals)}j + ${vectors[2].z.toFixed(args.decimals)}k
     c' = v2${u} ✕ v1${t} = ${vectors[6].x.toFixed(args.decimals)}i + ${vectors[6].y.toFixed(args.decimals)}j + ${vectors[6].z.toFixed(args.decimals)}k
     
-    v1${t} • v2${u} = v2${u} • v1${t}= ${Utils.calculateDotProduct(vectors[0],vectors[1]).toFixed(args.decimals)}
+    v1${t} • v2${u} = v2${u} • v1${t} = ${Utils.calculateDotProduct(vectors[0],vectors[1]).toFixed(args.decimals)}
 
     | v1${t} | = ${Utils.calculateVectorLenght(vectors[0]).toFixed(args.decimals)}
     | v2${u} | = ${Utils.calculateVectorLenght(vectors[1]).toFixed(args.decimals)}
