@@ -170,6 +170,12 @@ function updateLabels() {
     cLabelDOM.setAttribute('style',`left: ${cScreenPos.x + LABEL_X_OFFSET}px; top: ${cScreenPos.y}px`);
     cCommaLabelDOM.setAttribute('style',`left: ${cCommaScreenPos.x + LABEL_X_OFFSET}px; top: ${cCommaScreenPos.y}px`);
 
+    let t = args.t != 1 ? "t" : "";
+    let u = args.u != 1 ? "u" : "";
+
+    v1LabelDOM.innerText = `v1${t}`;
+    v2LabelDOM.innerText = `v2${u}`;
+
     updateLabelsVisibility();
 }
 
@@ -275,8 +281,8 @@ function animate() {
 }
 
 function updateInfoPanel() {
-    let t = args.t.toFixed(args.decimals) != 1 ? args.t.toFixed(args.decimals) : "";
-    let u = args.u.toFixed(args.decimals) != 1 ? args.u.toFixed(args.decimals) : "";
+    let t = args.t != 1 ? args.t.toFixed(args.decimals) : "";
+    let u = args.u != 1 ? args.u.toFixed(args.decimals) : "";
 
     infoPanelDOM.innerText = `${t}v1 = ${vectors[0].x.toFixed(args.decimals)}i + ${vectors[0].y.toFixed(args.decimals)}j + ${vectors[0].z.toFixed(args.decimals)}k
     ${u}v2 = ${vectors[1].x.toFixed(args.decimals)}i + ${vectors[1].y.toFixed(args.decimals)}j + ${vectors[1].z.toFixed(args.decimals)}k
@@ -342,8 +348,8 @@ function updateTableOfAngles() {
 
     let degToRadSwitch = args.anglesInRad ? 1 : 180 / Math.PI;
 
-    let t = args.t.toFixed(args.decimals) != 1 ? args.t.toFixed(args.decimals) : "";
-    let u = args.u.toFixed(args.decimals) != 1 ? args.u.toFixed(args.decimals) : "";
+    let t = args.t != 1 ? args.t.toFixed(args.decimals) : "";
+    let u = args.u != 1 ? args.u.toFixed(args.decimals) : "";
 
     tableOfAnglesDOM.innerHTML = `   
     <tr>
