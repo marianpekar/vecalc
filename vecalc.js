@@ -28,7 +28,7 @@ let args = {
     u: 1,
     decimals: 2,
     showAxis: true,
-    showGrid: true,
+    showGrid: false,
     showNormalized: false,
     anglesInRad: false,
     showResults: true,
